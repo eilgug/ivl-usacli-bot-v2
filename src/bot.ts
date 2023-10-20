@@ -7,6 +7,7 @@ import {
     createConversation,
 } from '@grammyjs/conversations';
 import { leaderboard } from './commands/custom/leaderboard';
+import { calendar } from './commands/custom/calendar';
 import express, { json } from 'express';
 
 type MyContext = Context & ConversationFlavor;
@@ -25,6 +26,7 @@ bot.use(
 );
 bot.use(conversations());
 bot.use(createConversation(leaderboard));
+bot.use(createConversation(calendar));
 
 bot.use(commands);
 

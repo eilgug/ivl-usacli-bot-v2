@@ -1,4 +1,4 @@
-import { IChampionship, IChampionshipDataRequest, IGroup, IGroupDataRequest, ILeaderboard, ILeaderboardDataRequest, IMatchRows, IMatchesDataRequest, ITerritory } from '../types';
+import { IChampionship, IChampionshipDataRequest, IGroup, IGroupDataRequest, ILeaderboard, ILeaderboardDataRequest, IMatchRows, IMatchesDataRequest, ITeam, ITerritory } from '../types';
 import { RestManager } from '../utils/restManager';
 
 export class IVLUSAcliService {
@@ -10,6 +10,7 @@ export class IVLUSAcliService {
         GET_STANDINGS: '/Classifica',
         GET_GROUP: '/GironiData',
         GET_TEAM_FROM_CHAMPIONSHIP: '/SquadreIscritteACampionato',
+        GET_TEAM_FROM_GROUP: '/SquadreIscritteAGirone',
     };
 
     static async getTerritory(): Promise<ITerritory[]> {
@@ -36,5 +37,9 @@ export class IVLUSAcliService {
 
     static async getTeamByChampionship(championship: string) {
         return this.restClient.get(`${this.endpoint.GET_TEAM_FROM_CHAMPIONSHIP}/${championship}`);
+    }
+
+    static async getTeamByGroup(group: string): Promise<ITeam[]> {
+        return this.restClient.get(`${this.endpoint.GET_TEAM_FROM_GROUP}/${group}`);
     }
 }

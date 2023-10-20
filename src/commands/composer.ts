@@ -10,5 +10,6 @@ const composer = new Composer<MyContext>();
 composer.command('start', start);
 composer.command('healthcheck', healthcheck);
 composer.command('classifica', async (ctx) => await ctx.conversation.enter('leaderboard'));
+composer.command('calendario', async (ctx) => await ctx.conversation.enter('calendar'));
 
 export default composer;
