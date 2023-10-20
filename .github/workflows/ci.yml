@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      
+    - name: Build docker image
+      env: 
+        BOT_TOKEN: ${{secrets.BOT_TOKEN}}
+      run: docker build . --file Dockerfile.prod --tag ivl-usacli-bot:$(date +%s) --build-arg BOT_TOKEN=$BOT_TOKEN --no-cache
+
+    - name: Push to Dockerhub
+      run: docker push robertoguglielmin/ivl-usacli-bot:$(date +%s)
