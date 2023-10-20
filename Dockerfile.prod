@@ -1,0 +1,29 @@
+# BUILD STAGE
+FROM node:18-bullseye-slim AS builder
+
+RUN apt-get update \
+    && apt-get upgrade -y
+
+COPY . ./application
+
+WORKDIR /application
+
+RUN npm i
+RUN npm run build
+
+# DEPLOY STAGE
+FROM node:18-bullseye-slim
+
+ARG BOT_TOKEN
+ENV BOT_TOKEN=${BOT_TOKEN}
+
+ENV NODE_ENV=production
+COPY package.json ./
+
+RUN npm i --omit=dev
+
+COPY --from=builder /application/dist ./dist
+
+EXPOSE 3000:3000
+
+CMD ["npm", "run", "start"]
