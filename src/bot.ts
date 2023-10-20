@@ -32,6 +32,6 @@ const server = express();
 server.use(json())
 server.post('/webhook', webhookCallback(bot, 'express'));
 
-server.listen(3000, () => console.log("SERVER IS LISTENING"));
+server.listen(3000, () => console.log("SERVER IS LISTENING ON PORT 3000"));
 
 // export default webhookCallback(bot, 'http');
