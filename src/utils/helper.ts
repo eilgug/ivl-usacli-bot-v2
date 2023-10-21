@@ -19,6 +19,15 @@ export function getCalendarMessage(calendarData: IMatch[], teamId: string) {
         .build();
 }
 
+export function getNextMatchMessage(nextMatchData: IMatch[], teamId: string) {
+    return new MessageBuilder()
+        .addText(
+            `⏩ ${MessageBuilder.formatAsItalic(MessageBuilder.formatAsBold('NEXT MATCH'))} ⏩\n`,
+        )
+        .addText(getFormattedNextMatch(nextMatchData, teamId))
+        .build();
+}
+
 function getFormattedLeaderboard(leaderboardData: ILeaderboard[]) {
     if (leaderboardData.length) {
         return leaderboardData
@@ -65,6 +74,48 @@ function getFormattedCalendar(calendarData: IMatch[], teamId: string) {
             .join('');
     } else {
         return MessageBuilder.formatAsItalic('\nSembra che non ci siano partite');
+    }
+}
+
+function getFormattedNextMatch(nextMatchData: IMatch[], teamId: string) {
+    if (nextMatchData.length == 1) {
+        let nextMatch = nextMatchData[0];
+        let { day, time } = formatDateTime(
+            nextMatch.data_orario_rinvio
+                ? nextMatch.data_orario_rinvio
+                : nextMatch.data_orario!,
+        );
+        let opponent: string;
+        if (teamId == nextMatch.squadra_casa_id!.toString()) {
+            opponent = nextMatch.squadra_ospite_name!;
+        } else {
+            opponent = nextMatch.squadra_casa_name!;
+        }
+
+        const building = nextMatch.palestra_rinvio_id
+            ? nextMatch.palestrarinvio_name!
+            : nextMatch.palestra1_name!;
+        const address = nextMatch.palestra_rinvio_id
+            ? `${nextMatch.palestrarinvio_indirizzo}, ${nextMatch.palestrarinvio_comune}`
+            : `${nextMatch.palestra1_indirizzo!}, ${nextMatch.palestra1_comune}`;
+        const lat = nextMatch.palestrarinvio_latitude
+            ? nextMatch.palestrarinvio_latitude!
+            : nextMatch.palestra1_latitude!;
+        const lon = nextMatch.palestrarinvio_longitude
+            ? nextMatch.palestrarinvio_longitude!
+            : nextMatch.palestra1_longitude!;
+
+        return new MessageBuilder()
+            .addText(`🗡️ ${MessageBuilder.formatAsBold(opponent)}`, true)
+            .addText(`🗓️ ${day}`, true)
+            .addText(`🕒 ${time}`, true)
+            .addText(building ? `🏢 ${building}` : '', true)
+            .addText(`📍 [${address}](https://www.google.com/maps/dir//${lat},${lon}/@${lat},${lon},15z)`)
+            .build();
+    } else if (nextMatchData.length == 0) {
+        return MessageBuilder.formatAsItalic('\nSembra che non ci siano partite');
+    } else {
+        return MessageBuilder.formatAsItalic('\nSta succendendo qualcosa di strano');
     }
 }
 

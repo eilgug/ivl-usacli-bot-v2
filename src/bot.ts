@@ -9,6 +9,7 @@ import {
 import { leaderboard } from './commands/custom/leaderboard';
 import { calendar } from './commands/custom/calendar';
 import express, { json } from 'express';
+import { nextmatch } from './commands/custom/nextmatch';
 
 type MyContext = Context & ConversationFlavor;
 type MyConversation = Conversation<MyContext>;
@@ -27,6 +28,7 @@ bot.use(
 bot.use(conversations());
 bot.use(createConversation(leaderboard));
 bot.use(createConversation(calendar));
+bot.use(createConversation(nextmatch));
 
 bot.use(commands);
 

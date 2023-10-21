@@ -20,7 +20,7 @@ jobs:
     - name: Build docker image
       env:
         BOT_TOKEN: ${{secrets.BOT_TOKEN}}
-      run: docker build . --file Dockerfile.prod --tag robertoguglielmin/ivl-usacli-bot --build-arg BOT_TOKEN=$BOT_TOKEN --no-cache
+      run: docker build . --file Dockerfile.prod --tag robertoguglielmin/ivl-usacli-bot --build-arg --no-cache
 
     - name: Push to Dockerhub
       run: docker push robertoguglielmin/ivl-usacli-bot

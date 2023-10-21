@@ -4,14 +4,14 @@ import { getTerritories } from '../../external/territories';
 import { selectItem } from '../../utils/grammyHelper';
 import { getChampionships } from '../../external/championship';
 import { getGroups } from '../../external/group';
-import { getCalendarMessage, getLeaderboardMessage } from '../../utils/helper';
+import { getCalendarMessage, getLeaderboardMessage, getNextMatchMessage } from '../../utils/helper';
 import { getTeamsByGroup } from '../../external/team';
 import { getCalendar } from '../../external/calendar';
 
 type MyContext = Context & ConversationFlavor;
 type MyConversation = Conversation<MyContext>;
 
-const calendar = async (conversation: MyConversation, ctx: MyContext) => {
+const nextmatch = async (conversation: MyConversation, ctx: MyContext) => {
     const chatId = ctx.chat?.id!;
 
     const territories = await getTerritories(conversation);
@@ -54,10 +54,10 @@ const calendar = async (conversation: MyConversation, ctx: MyContext) => {
         groupMessageId
     )
 
-    const calendar = (await getCalendar(conversation, territoryId, championshipId, groupId, teamId)).rows;
+    const nextMatch = (await getCalendar(conversation, territoryId, championshipId, groupId, teamId, 1, new Date().toISOString())).rows;
 
-    const message = getCalendarMessage(calendar, teamId);
+    const message = getNextMatchMessage(nextMatch, teamId);
     await ctx.api.editMessageText(chatId, teamMessageId, message, { parse_mode: 'MarkdownV2' });
 };
 
-export { calendar };
+export { nextmatch };
