@@ -8,7 +8,6 @@ import {
 } from '@grammyjs/conversations';
 import { leaderboard } from './commands/custom/leaderboard';
 import { calendar } from './commands/custom/calendar';
-import express, { json, request, response } from 'express';
 import { nextmatch } from './commands/custom/nextmatch';
 
 type MyContext = Context & ConversationFlavor;
@@ -32,16 +31,4 @@ bot.use(createConversation(nextmatch));
 
 bot.use(commands);
 
-const server = express();
-server.use(json())
-server.post('/webhook', webhookCallback(bot, 'express'));
-server.get('/healtcheck', (request, response) => {
-    response.json({
-        status: 200,
-        message: "🍀 Server is alive"
-    })
-})
-
-server.listen(3000, () => console.log("SERVER IS LISTENING ON PORT 3000"));
-
-// export default webhookCallback(bot, 'http');
+export default bot;
