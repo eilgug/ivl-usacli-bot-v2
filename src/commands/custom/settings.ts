@@ -63,8 +63,8 @@ const settings = async (conversation: MyConversation, ctx: MyContext) => {
     }
     const storedSettings = await saveChatSettings(conversation, chatId.toString(), settings);
 
-    const message = getSettingsMessage(storedSettings);
-    await ctx.api.editMessageText(chatId, teamMessageId, message, { parse_mode: 'MarkdownV2' });
+    const message = getSettingsMessage();
+    await ctx.api.editMessageText(chatId, teamMessageId, message);
 };
 
 export { settings };

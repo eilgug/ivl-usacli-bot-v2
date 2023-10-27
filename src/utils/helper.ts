@@ -28,8 +28,8 @@ export function getNextMatchMessage(nextMatchData: IMatch[], teamId: string) {
         .build();
 }
 
-export function getSettingsMessage(settings: ISettings & { chatId: string }) {
-    return new MessageBuilder().addText(`Preferenze impostate! ✔️\n`).build();
+export function getSettingsMessage() {
+    return new MessageBuilder().addText(`Preferenze impostate! ✔️`).build();
 }
 
 function getFormattedLeaderboard(leaderboardData: ILeaderboard[]) {
