@@ -7,6 +7,7 @@ import { getGroups } from '../../external/group';
 import { getLeaderboard } from '../../external/leaderboard';
 import { MessageBuilder } from '../../utils/messageBuilder';
 import { getLeaderboardMessage } from '../../utils/helper';
+import { getChatSettings } from '../../external/settings';
 
 type MyContext = Context & ConversationFlavor;
 type MyConversation = Conversation<MyContext>;
@@ -14,38 +15,48 @@ type MyConversation = Conversation<MyContext>;
 const leaderboard = async (conversation: MyConversation, ctx: MyContext) => {
     const chatId = ctx.chat?.id!;
 
-    const territories = await getTerritories(conversation);
-    const {
-        selectedItem: territoryId,
-        replyMessage,
-        messageId: territoryMessageId,
-    } = await selectItem(conversation, ctx, 'Seleziona un territorio:', territories, 'ter');
+    const settings = await getChatSettings(conversation, chatId.toString());
 
-    const championships = await getChampionships(conversation, territoryId);
-    const { selectedItem: championshipId, messageId: championshipMessageId } = await selectItem(
-        conversation,
-        ctx,
-        'Seleziona un campionato:',
-        championships,
-        'cha',
-        chatId,
-        territoryMessageId,
-    );
+    if (!settings) {
+        const territories = await getTerritories(conversation);
+        const {
+            selectedItem: territoryId,
+            replyMessage,
+            messageId: territoryMessageId,
+        } = await selectItem(conversation, ctx, 'Seleziona un territorio:', territories, 'ter');
 
-    const groups = await getGroups(conversation, territoryId, championshipId);
-    const { selectedItem: groupId, messageId: groupMessageId } = await selectItem(
-        conversation,
-        ctx,
-        'Seleziona un girone:',
-        groups,
-        'gru',
-        chatId,
-        championshipMessageId,
-    );
+        const championships = await getChampionships(conversation, territoryId);
+        const { selectedItem: championshipId, messageId: championshipMessageId } = await selectItem(
+            conversation,
+            ctx,
+            'Seleziona un campionato:',
+            championships,
+            'cha',
+            chatId,
+            territoryMessageId,
+        );
 
-    const leaderboard = await getLeaderboard(conversation, groupId);
-    const message = getLeaderboardMessage(leaderboard);
-    await ctx.api.editMessageText(chatId, groupMessageId, message, { parse_mode: 'MarkdownV2' });
+        const groups = await getGroups(conversation, territoryId, championshipId);
+        const { selectedItem: groupId, messageId: groupMessageId } = await selectItem(
+            conversation,
+            ctx,
+            'Seleziona un girone:',
+            groups,
+            'gru',
+            chatId,
+            championshipMessageId,
+        );
+
+        const leaderboard = await getLeaderboard(conversation, groupId);
+        const message = getLeaderboardMessage(leaderboard);
+        await ctx.api.editMessageText(chatId, groupMessageId, message, {
+            parse_mode: 'MarkdownV2',
+        });
+    } else {
+        const leaderboard = await getLeaderboard(conversation, settings.groupId);
+        const message = getLeaderboardMessage(leaderboard);
+        await ctx.reply(message, { parse_mode: 'MarkdownV2' });
+    }
 };
 
 export { leaderboard };
