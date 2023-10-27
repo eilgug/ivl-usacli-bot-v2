@@ -236,3 +236,10 @@ export interface IGroupDataRequest {
     inizio_stagione: string;
     fine_stagione: string;
 }
+
+export interface ISettings {
+    territoryId: string;
+    championshipId: string;
+    groupId: string;
+    teamId: string;
+}

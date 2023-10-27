@@ -1,4 +1,4 @@
-import { ILeaderboard, IMatch } from '../types';
+import { ILeaderboard, IMatch, ISettings } from '../types';
 import { MessageBuilder } from './messageBuilder';
 
 export function getLeaderboardMessage(leaderboardData: ILeaderboard[]) {
@@ -26,6 +26,10 @@ export function getNextMatchMessage(nextMatchData: IMatch[], teamId: string) {
         )
         .addText(getFormattedNextMatch(nextMatchData, teamId))
         .build();
+}
+
+export function getSettingsMessage(settings: ISettings & { chatId: string }) {
+    return new MessageBuilder().addText(`Preferenze impostate! ✔️\n`).build();
 }
 
 function getFormattedLeaderboard(leaderboardData: ILeaderboard[]) {
@@ -81,9 +85,7 @@ function getFormattedNextMatch(nextMatchData: IMatch[], teamId: string) {
     if (nextMatchData.length == 1) {
         let nextMatch = nextMatchData[0];
         let { day, time } = formatDateTime(
-            nextMatch.data_orario_rinvio
-                ? nextMatch.data_orario_rinvio
-                : nextMatch.data_orario!,
+            nextMatch.data_orario_rinvio ? nextMatch.data_orario_rinvio : nextMatch.data_orario!,
         );
         let opponent: string;
         if (teamId == nextMatch.squadra_casa_id!.toString()) {
@@ -110,7 +112,9 @@ function getFormattedNextMatch(nextMatchData: IMatch[], teamId: string) {
             .addText(`🗓️ ${day}`, true)
             .addText(`🕒 ${time}`, true)
             .addText(building ? `🏢 ${building}` : '', true)
-            .addText(`📍 [${address}](https://www.google.com/maps/dir//${lat},${lon}/@${lat},${lon},15z)`)
+            .addText(
+                `📍 [${address}](https://www.google.com/maps/dir//${lat},${lon}/@${lat},${lon},15z)`,
+            )
             .build();
     } else if (nextMatchData.length == 0) {
         return MessageBuilder.formatAsItalic('\nSembra che non ci siano partite');

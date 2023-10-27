@@ -12,5 +12,6 @@ composer.command('healthcheck', healthcheck);
 composer.command('classifica', async (ctx) => await ctx.conversation.enter('leaderboard'));
 composer.command('calendario', async (ctx) => await ctx.conversation.enter('calendar'));
 composer.command('nextmatch', async (ctx) => await ctx.conversation.enter('nextmatch'));
+composer.command('preferenze', async (ctx) => await ctx.conversation.enter('settings'));
 
 export default composer;

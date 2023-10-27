@@ -9,6 +9,7 @@ import {
 import { leaderboard } from './commands/custom/leaderboard';
 import { calendar } from './commands/custom/calendar';
 import { nextmatch } from './commands/custom/nextmatch';
+import { settings } from './commands/custom/settings';
 
 type MyContext = Context & ConversationFlavor;
 type MyConversation = Conversation<MyContext>;
@@ -28,6 +29,7 @@ bot.use(conversations());
 bot.use(createConversation(leaderboard));
 bot.use(createConversation(calendar));
 bot.use(createConversation(nextmatch));
+bot.use(createConversation(settings));
 
 bot.use(commands);
 
