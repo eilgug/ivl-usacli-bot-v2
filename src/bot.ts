@@ -1,4 +1,4 @@
-import { Bot, Context, session, webhookCallback } from 'grammy';
+import { Bot, Context, InputFile, session, webhookCallback } from 'grammy';
 import commands from './commands/composer';
 import {
     type Conversation,
@@ -30,7 +30,6 @@ bot.use(createConversation(leaderboard));
 bot.use(createConversation(calendar));
 bot.use(createConversation(nextmatch));
 bot.use(createConversation(settings));
-
 bot.use(commands);
 
 export default bot;

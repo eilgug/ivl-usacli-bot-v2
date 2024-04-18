@@ -32,6 +32,6 @@ It uses a tunneling system (ngrok) to connect the local bot to the internet.
 To obtain a bot token, start a chat with @BotFather on Telegram and follow the instructions provided.
 
 ### Set webhook url
-`https://api.telegram.org/bot<BOT-TOKEN>/setWebhook?url=<WEBHOOK-URL-PATH-TO-FILE>`
+`https://api.telegram.org/bot<BOT-TOKEN>/setWebhook?url=<HOST-URL>/api/webhook`
 
 [@Eilgug](https://linktr.ee/eilgug)

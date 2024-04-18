@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/bot.js",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && cp -rv ./static/ ./dist/",
+    "dev": "nodemon -e ts -x ts-node src/bot.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
